@@ -40,11 +40,117 @@ The rest of this report is organized as follows: Section 2 gives an introduction
 
 #### 3.1 Results on Text Data 
 
+```
+Projected 500 samples from 130107 to 1000 in 0.523s
+Random matrix with size: 4.329MB
+Mean distances rate: 1.00 (0.10)
+Projected 500 samples from 130107 to 2000 in 1.009s
+Random matrix with size: 8.651MB
+Mean distances rate: 1.04 (0.08)
+```
+
+![alt text](images\RP_TXT_1.png)
+
+![alt text](images\RP_TXT_2.png)
+
+![alt text](images\RP_TXT_3.png)
+
+![alt text](images\RP_TXT_4.png)
+
 #### 3.2 Results on Image Data
+
+```
+Projected 400 samples from 4096 to 1000 in 0.135s
+Random matrix with size: 0.769MB
+Mean distances rate: 0.99 (0.04)
+Projected 400 samples from 4096 to 2000 in 0.261s
+Random matrix with size: 1.530MB
+Mean distances rate: 0.99 (0.03)
+```
+
+
+
+![alt text](images\RP_IMG_1.png)
+
+![alt text](images\RP_IMG_2.png)
+
+![alt text](images\RP_IMG_3.png)
+
+![alt text](images\RP_IMG_4.png)
 
 ## 4. Experimental Performance of K-Means and K-Nearest-Neighbors
 
 #### 4.1 Results on K-Means 
+
+##### Results on Text Data
+
+###### K-Means on Original Image Data
+
+```
+Homogeneity: 0.467
+Completeness: 0.553
+V-measure: 0.506
+```
+
+###### K-Means on Image Data after RP
+
+```
+Homogeneity: 0.479
+Completeness: 0.562
+V-measure: 0.517
+```
+
+###### K-Means on Image Data after SRP
+
+```
+Homogeneity: 0.465
+Completeness: 0.544
+V-measure: 0.501
+```
+
+###### K-Means on Image Data after PCA
+
+```
+Homogeneity: 0.461
+Completeness: 0.556
+V-measure: 0.504
+```
+
+##### Results on Image Data
+
+##### 
+
+###### kNN on Original Image Data
+
+```
+Homogeneity: 0.646
+Completeness: 0.675
+V-measure: 0.660
+```
+
+######  kNN on Image Data after RP
+
+```
+Homogeneity: 0.639
+Completeness: 0.667
+V-measure: 0.653
+```
+
+######  kNN on Image Data after SRP
+
+```
+Homogeneity: 0.599
+Completeness: 0.620
+V-measure: 0.609
+```
+
+######  kNN on Image Data after PCA
+
+```
+Homogeneity: 0.580
+Completeness: 0.603
+V-measure: 0.591
+```
 
 #### 4.2 Results on K-Nearest-Neighbors
 
@@ -72,7 +178,7 @@ talk.politics.mideast       0.71      0.99      0.83
 
 The average running time is around 122.48 seconds.
 
-###### kNN on Dataset after RP
+###### kNN on Text Data after RP
 
 The following table shows the performance result of kNN on the dataset after random projection, where each data point has a reduced dimension of 2000:
 
@@ -90,7 +196,7 @@ talk.politics.mideast       0.77      0.96      0.85
 
 The avarage running time for applying RP is 8.23 seconds. The average running time for performing kNN is 6.15 seconds. The combined time cost is significantly less than running kNN on the original datasets, while the precision, recall, and f1 score are almost the same as the original dataset.
 
-###### kNN on Dataset after SRP
+###### kNN on Text Data after SRP
 
 The following table shows the performance result of kNN on the dataset after sparse random projection, where each data point has a reduced dimension of 2000:
 
@@ -108,7 +214,7 @@ talk.politics.mideast       0.79      0.92      0.85
 
 The avarage running time for applying RP is 3.13 seconds. The average running time for performing kNN is 6.17 seconds. The combined time cost is significantly less than running kNN on the original datasets, and also a bit more efficient than running kNN on the dataset after RP. The precision, recall, and f1 score are a bit lower than RP, although the overall performance is still close to the original dataset.
 
-###### kNN on Dataset after PCA
+###### kNN on Text Data after PCA
 
 The following table shows the performance result of kNN on the dataset after performing PCA, where each data point has a reduced dimension of 2000:
 
@@ -127,6 +233,36 @@ talk.politics.mideast       0.56      0.99      0.72
  The average running time for applying PCA is 111.72 seconds. The average running time for performing kNN is 6.20 seconds. The combined time cost is around the same as running kNN on the original datasets, and is much less efficient than running kNN after RP or SRP. The precision, recall, and f1 score are lower than RP, although look still decent.
 
 Overall, running kNN on all three datasets after dimensionality reduction gives decent predictions. Possibly due to the property to nearly preserve interpoint distance, RP and SRP performs slightly better than PCA. In terms of time complexity, applying PCA + kNN does not improve much over kNN on original dataset. RP + kNN and SRP + kNN are both much faster than kNN on original dataset. Due to its advantage in sparsity, SRP is more efficient than RP.
+
+##### Results on Image Data
+
+###### kNN on Original Text Data
+
+```
+Avg precision		Avg Recall			Avg f1
+(0.8145846819846817, 0.71450000000000002, 0.71391964285714304)
+```
+
+###### kNN on Text Data after RP
+
+```
+Avg precision		Avg Recall	Avg f1
+(0.79705135212010236, 0.71875, 0.71385948336793925)
+```
+
+######  kNN on Text Data after SRP
+
+```
+Avg precision		Avg Recall			Avg f1
+(0.7992482836607836, 0.72074999999999989, 0.71426363224194123)
+```
+
+######  kNN on Text Data after PCA
+
+```
+Avg precision		Avg Recall			Avg f1
+(0.81424647089022106, 0.71825000000000006, 0.71345610879058996)
+```
 
 ## 5. Pros and Cons of Dimensionality Reduction Methods
 
