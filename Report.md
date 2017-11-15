@@ -1,4 +1,4 @@
-# Dimensionality Reduction and Its Application in Data Mining
+# 0Dimensionality Reduction and Its Application in Data Mining
 
 **Team members:**
 
@@ -252,6 +252,13 @@ talk.politics.mideast       0.56      0.99      0.72
 ```
 
 The average running time for applying PCA is 111.72 seconds. The average running time for performing kNN is 6.20 seconds. The combined time cost is around the same as running kNN on the original datasets, and is much less efficient than running kNN after RP or SRP. The precision, recall, and f1 score are lower than RP, although look still decent.
+
+|           | Original Image + K-NN | RP + K-NN     | SRP + K-NN    | PCA + K-NN      |
+| --------- | --------------------- | ------------- | ------------- | --------------- |
+| Time      | 122.48s               | 8.23s + 6.15s | 3.13s + 6.17s | 111.72s + 6.20s |
+| Precision | 0.84                  | 0.82          | 0.81          | 0.82            |
+| Recall    | 0.79                  | 0.80          | 0.80          | 0.74            |
+| F1-Score  | 0.79                  | 0.80          | 0.79          | 0.75            |
 
 Overall, running kNN on all three datasets after dimensionality reduction gives decent predictions. Possibly due to the property to nearly preserve interpoint distance, RP and SRP performs slightly better than PCA. In terms of time complexity, applying PCA + kNN does not improve much over kNN on original dataset. RP + kNN and SRP + kNN are both much faster than kNN on original dataset. Due to its advantage in sparsity, SRP is more efficient than RP.
 
