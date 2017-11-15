@@ -40,95 +40,101 @@ The rest of this report is organized as follows: Section 2 gives an introduction
 
 #### 3.1 Results on Text Data 
 
-```
-Projected 500 samples from 130107 to 1000 in 0.523s
-Random matrix with size: 4.329MB
-Mean distances rate: 1.00 (0.10)
-Projected 500 samples from 130107 to 2000 in 1.009s
-Random matrix with size: 8.651MB
-Mean distances rate: 1.04 (0.08)
-```
+To experimentally study dimensionality reduction on text data, we use the 20 newsgroups dataset provided by sklearn API. For each data point in the text dataset, we convert it to a **term frequency–inverse document frequency** (TF-IDF) vector. TF-IDF vectorization is a common way to represent a document as a vector, by reflecting and adjusting the frequency of a word carefully. In the TF-IDF representation of our dataset has a dimensionality of 130107, we reduce the dimensionality to 2000, using random projection, sparse random projection, and PCA respectively.
 
-![alt text](images\RP_TXT_1.png)
+In this experiment, we are interested in how well various dimensionality reduction methods can reserve pairwise distance. For each dimensionality reduction method, we compare the original pairwise distance of the text vectors with the pairwise distance after dimensionality reduction. In particular, for the ease of visualisation, we take 100 vectors from the vectorized text dataset, and compute their paiwise distance before and after dimensionality reduction. For each pair of vectors, we calculate $Projected$ $Distance$ $/$ $Original$ $Distance$, and plot the overall results in a histogram plot.
 
-![alt text](images\RP_TXT_2.png)
+*Histogram for RP on text:*
 
-![alt text](images\RP_TXT_3.png)
+![alt text](images\text_rp_hist.png)
 
-![alt text](images\RP_TXT_4.png)
+*Histogram for SRP on text:*
+
+![alt text](images\text_srp_hist.png)
+
+*Histogram for PCA on text:*
+
+![alt text](images\text_pca_hist.png)
+
+
+
+As shown in the graphs above, PCA performs extremely well on this small dataset of size = 100 and reduced dimension = 2000. This justifies the "optimality" of PCA as mentioned in last section.
+
+RP gives a decent performance, with most ratios are concentrated around 1. SRP gives a worse performance than RP, with a less concentrated histogram. Overall, both RP and SRP shows their cabability in preserving pairwise distance on this text dataset.
 
 #### 3.2 Results on Image Data
 
-```
-Projected 400 samples from 4096 to 1000 in 0.135s
-Random matrix with size: 0.769MB
-Mean distances rate: 0.99 (0.04)
-Projected 400 samples from 4096 to 2000 in 0.261s
-Random matrix with size: 1.530MB
-Mean distances rate: 0.99 (0.03)
-```
+The Olivetti faces dataset we use contains 400 images with dimension 4096. Similar to the text dataset, we take 100 image vectors from this dataset, reduce the dimension from 4096 to 500 using various dimensionality reduction methods, and then visualize their performance.
 
+*Histogram for RP on image:*
 
+![alt text](images\image_rp_hist.png)
 
-![alt text](images\RP_IMG_1.png)
+*Histogram for SRP on image:*
 
-![alt text](images\RP_IMG_2.png)
+![alt text](images\image_srp_hist.png)
 
-![alt text](images\RP_IMG_3.png)
+*Histogram for PCA on image:*
 
-![alt text](images\RP_IMG_4.png)
+![alt text](images\image_pca_hist.png)
+
+Similar to the results in last subsection, PCA gives impressive performance, by almost keeping the pairwise distance exactly. This is due to the small size of the dataset, as well the "optimality" property of PCA.
+
+SRP gives almost the same performance as RP, although RP still outperforms SRP slightly by giving a slightly more concentrated histogram.
+
+To summarise this section, we have seen that PCA performs nearly perfect in preserving pairwise distance on both of our datasets. Both RP and SRP give decent performance, by preserving pairwise distance effectively, although RP performs slightly better than SRP.
 
 ## 4. Experimental Performance of K-Means and K-Nearest-Neighbors
 
-#### 4.1 Experimental Data and Dimension Reduction.
+#### 4.1 Experimental Settings
 
-In our experiment, we performed K-Means and K-N-N algorithms on Text data and Image data. For each algorithm and data type, we applied 3 type of dimension reduction, Random Projection, Sparse Random Project and PCA. Then compare the results before and after dimension reduction.
+In our experiment, we performed K-Means and K-NN algorithms on Text data and Image data. For each algorithm and data type, we applied 3 type of dimension reduction, Random Projection, Sparse Random Project and PCA. Then compare the results before and after dimension reduction.
 
-For the text data, we use the 20 newsgroups dataset provided by sklearn API. The original *20 newsgroups dataset* comprises around 18000 news posts on 20 topics. To conduct our experiment within a rational time limit, we choose 4 or 5 topics from the original dataset.  For each data point in the text dataset, we convert it to a **term frequency–inverse document frequency** (TF-IDF) vector. TF-IDF vectorization is a common way to represent a document as a vector, by reflecting and adjusting the frequency of a word carefully. In the TF-IDF representation of our dataset, each of the 2599 data points has a length of 41853.
+For the text data, we use the 20 newsgroups dataset provided by sklearn API. The original *20 newsgroups dataset* comprises around 18000 news posts on 20 topics. To conduct our experiment within a rational time limit, we choose 5 topics from the original dataset.  For each data point in the text dataset, we convert it to a TF-IDF vector. In the TF-IDF representation of our dataset, each of the 2599 data points has a length of 41853.
 
-For the image data, we use the Olivetti faces dataset from AT&T provided by sklearn API. The original dataset  consists of 10 pictures each of 40 individuals. To conduct our experiment faster, we choose 10 individuals' face data, each has 10 pictures. 
-
-
+For the image data, we use the Olivetti faces dataset from AT&T. The original dataset  consists of 10 pictures each of 40 individuals. To conduct our experiment faster, we choose 10 individuals' face data, each has 10 pictures.
 
 #### 4.2 Results on K-Means 
 
-K-Means clustering is type of unsupervised learning, which is used to find groups which have not been explicitly labeled in the data. The goal of this experiment is to find groups in the data, for text data, we choose 4 groups, for image data, we choose 10 groups. The algorithm works iteratively to assign each data point to one of the groups based on the features that are provided.
+K-Means clustering is a common unsupervised learning algorithm, which is used to find groups which have not been explicitly labeled in the data. K-Means algorithm requires a hyperparameter $k$, which is the number of clusters to be considered. We set $k=5$ clustering the text data, and $k=10$ for clustering image data. The algorithm works iteratively to assign each data point to one of the groups based on the features that are provided.
 
-We compare the performance of K-Means in terms of  time, homogeneity, completeness, and v-measure. Homogeneity means each cluster contains only members of a single group, Completeness means all members of a given group are assigned to the same cluster, and the harmonic mean of homogeneity and completeness is V-measure, can be used to evaluate the agreement of two independent assignment on the same dataset.
+We compare the performance of K-Means in terms of time, homogeneity, completeness, and v-measure. Homogeneity, completeness and V-measure are common measurement metrics for clustering, when the ground truth of the clusters are available. A homogeneity score is higher if the clusters contain only data points which are members of a single class. A completeness score is higher if all the data points that are members of a given class are elements of the same cluster. The harmonic mean of homogeneity and completeness gives V-measure. All experiments have been done for 20 times, and we take the mean as the final result for comparison.
 
 ##### 4.2.1 Results on Text Data
 
-In this experiment, we conduct K-Means on 3387 news with 4 topics.  The original data has dimension of 10000, and is reduced to 2000 by RP, SRP and PCA. The following table show the time and performance data for the original data and dimension reduced data. Basically the performance is mostly the same, but there is difference in processing time, RP and SRP performs best in terms of time complexity , and PCA takes longer on dimension reduction. 
+In this experiment, we conduct K-Means on 3387 news from 4 topics. The original data has dimension of 10000, and is reduced to 2000 by RP, SRP and PCA. The following table shows the performance results for original data and dimensionality-reduced data. 
 
-| K-Means / Text Data | Original Text + K-Means | RP + K-Means | SRP + K-Means | PCA + K-Means |
-| ------------------- | ----------------------- | ------------ | ------------- | ------------- |
-| Time                | 77.56s                  | 5.6s +16.89s | 2.7s + 20s    | 73s + 15.92s  |
-| Homogeneity         | 0.467                   | 0.479        | 0.465         | 0.461         |
-| Completeness        | 0.553                   | 0.562        | 0.544         | 0.556         |
-| V-measure           | 0.506                   | 0.517        | 0.501         | 0.504         |
+|              | Original Text + K-Means | RP + K-Means | SRP + K-Means | PCA + K-Means |
+| ------------ | ----------------------- | ------------ | ------------- | ------------- |
+| Time         | 77.56s                  | 5.6s +16.89s | 2.7s + 16.92s | 73s + 15.92s  |
+| Homogeneity  | 0.467                   | 0.470        | 0.465         | 0.461         |
+| Completeness | 0.553                   | 0.562        | 0.544         | 0.556         |
+| V-measure    | 0.506                   | 0.517        | 0.501         | 0.504         |
 
-Overall in terms of homogeneity and completeness, there are more or less the same, it's possibly due to the property to nearly preserve interpoint distance. In terms of time complexity, RP and SRP perform very well, SRP performs best due to the advantage of sparsity, PCA + K-Means doesn't improve much comparing with K-Means on original data.
+The performance of clustering is almost the same for all the 3 dimensionality reduction methods, with RP performs slightly better than the other two. In terms of running, RP and SRP perform very well, SRP performs best due to the advantage of sparsity. Surprisingly, RP slightly outperforms the original dataset. This might be due to the specific properties of the vectorized representation of the text dataset, as well as some experimental errors. Despite the perfect performance of PCA in Section 3, PCA on this dataset of larger size (3387) is not as impressive, by giving a slightly worse performance than RP.
 
-
+In terms of the running time, SRP performs the best as expected, due to the sparsity of random matrix. RP is also efficient, by giving a slightly slower performance than SRP. PCA takes much longer time, and the overall time used for PCA + K-Means is more than the time of running K-Means on original data. This verifies the larger time complexity of PCA comparing to RP and SRP.
 
 ##### 4.2.2 Results on Image Data
 
-For image data, we reduce the dimension from 4096 to 500 with 10 groups, e.g 10 individual faces. From the table below, we can find that in terms of time cost, PCA + K-Means perform best, but its homogeneity and completeness are worst. RP+K-Means have similar homogeneity and completeness but with much less time than K-Means on original data. For SRP + KMeans, it performs a little bit faster than RP+K-Means but its homogeneity and completeness  are a little worse than RP+KMeans.
+For image data, we conduct clustering task on 100 images from 10 categories. We reduce the dimension from 4096 to 500 using various dimensionality reduction methods. The following table shows the performance results for original data and dimensionality-reduced data. 
 
-| K-Means / Image Data | Original Image + K-Means | RP + K-Means   | SRP + K-Means  | PCA + K-Means  |
-| -------------------- | ------------------------ | -------------- | -------------- | -------------- |
-| Time                 | 0.381s                   | 0.07s + 0.181s | 0.05s + 0.174s | 0.02s + 0.114s |
-| Homogeneity          | 0.646                    | 0.639          | 0.599          | 0.580          |
-| Completeness         | 0.675                    | 0.667          | 0.620          | 0.603          |
-| V-measure            | 0.660                    | 0.653          | 0.609          | 0.591          |
+|              | Original Image + K-Means | RP + K-Means   | SRP + K-Means  | PCA + K-Means  |
+| ------------ | ------------------------ | -------------- | -------------- | -------------- |
+| Time         | 0.381s                   | 0.07s + 0.181s | 0.05s + 0.174s | 0.02s + 0.114s |
+| Homogeneity  | 0.646                    | 0.639          | 0.599          | 0.580          |
+| Completeness | 0.675                    | 0.667          | 0.620          | 0.603          |
+| V-measure    | 0.660                    | 0.653          | 0.609          | 0.591          |
 
-
+Similar to the case on text, the performance of RP + K-means outperforms SRP and PCA, though RP has slightly lower performance than the original data in this case. It is worth noted that PCA has the best time efficiency. The reason might be due to the overhead for creating random matrix that RP and SRP involved. , Since the dataset is quite small in this case, the benefit gained from time complexity is much smaller than the overheads in the cases of RP and SRP.
 
 #### 4.3 Results on K-Nearest-Neighbors
 
 ##### 4.3.1 Results on Text Data
 
 We use the *hold-out* method to split the 2599 data points into training set and test set with a proportion of 0.6:0.4. Evaluation is done by training a kNN model on the training set, and testing its performance on the test set. Such splitting and evaluation are done for 20 times, and we take the mean of the results as our evaluation result. The main purpose of this evaluation is to compare the time complexity on different datasets, and roughly compare their performance on test sets, so our evaluation setting should be sufficient, though it might not be optimal for estimating generalization ability of a model.
+
+We use precision, recall, and f1-score as our metrics for evaluating the performance of a classifier. Precision measures the ability of the classifier not to label as positive a sample that is negative, and recall measures the ability of the classifier to find all the positive samples. F1-score is a weighted harmonic mean of the precision and recall. Higher values of the metrics mean better performance.
 
 ###### kNN on Original Text Data
 
@@ -200,39 +206,22 @@ talk.politics.mideast       0.56      0.99      0.72
           avg / total       0.82      0.74      0.75
 ```
 
- The average running time for applying PCA is 111.72 seconds. The average running time for performing kNN is 6.20 seconds. The combined time cost is around the same as running kNN on the original datasets, and is much less efficient than running kNN after RP or SRP. The precision, recall, and f1 score are lower than RP, although look still decent.
+The average running time for applying PCA is 111.72 seconds. The average running time for performing kNN is 6.20 seconds. The combined time cost is around the same as running kNN on the original datasets, and is much less efficient than running kNN after RP or SRP. The precision, recall, and f1 score are lower than RP, although look still decent.
 
 Overall, running kNN on all three datasets after dimensionality reduction gives decent predictions. Possibly due to the property to nearly preserve interpoint distance, RP and SRP performs slightly better than PCA. In terms of time complexity, applying PCA + kNN does not improve much over kNN on original dataset. RP + kNN and SRP + kNN are both much faster than kNN on original dataset. Due to its advantage in sparsity, SRP is more efficient than RP.
 
 ##### 4.3.2 Results on Image Data
 
-###### kNN on Original Text Data
+Similar to the experimental setting above for text data, the 100 images are split into training set and test set with a proportion of 0.6:0.4 using *hold-out* and stratified sampling. Evaluation is done by training a kNN model on the training set, and testing its performance on the test set. Such splitting and evaluation are done for 20 times, and we take the mean of the results as our evaluation result. The following table shows the evaluation results:
 
-```
-Avg precision		Avg Recall			Avg f1
-(0.8145846819846817, 0.71450000000000002, 0.71391964285714304)
-```
+|           | Original Image + K-NN | RP + K-NN      | SRP + K-NN     | PCA + K-NN     |
+| --------- | --------------------- | -------------- | -------------- | -------------- |
+| Time      | 0.381s                | 0.07s + 0.181s | 0.05s + 0.174s | 0.02s + 0.114s |
+| Precision | 0.815                 | 0.797          | 0.799          | 0.814          |
+| Recall    | 0.715                 | 0.719          | 0.721          | 0.718          |
+| F1-Score  | 0.714                 | 0.714          | 0.714          | 0.713          |
 
-###### kNN on Text Data after RP
-
-```
-Avg precision		Avg Recall	Avg f1
-(0.79705135212010236, 0.71875, 0.71385948336793925)
-```
-
-######  kNN on Text Data after SRP
-
-```
-Avg precision		Avg Recall			Avg f1
-(0.7992482836607836, 0.72074999999999989, 0.71426363224194123)
-```
-
-######  kNN on Text Data after PCA
-
-```
-Avg precision		Avg Recall			Avg f1
-(0.81424647089022106, 0.71825000000000006, 0.71345610879058996)
-```
+All three dimensionality reduction methods give very similar results. As the dataset is small, it is difficult to draw any conclusions. In terms of time complexity, as we have reasoned in Section 4.2.2, the PCA is the fastest in running timei, although it has a larger time complexity.
 
 ## 5. Pros and Cons of Dimensionality Reduction Methods
 
