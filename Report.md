@@ -24,7 +24,7 @@ After empirically studying the two dimension reduction techniques, we apply some
 
 We will use two real-world datasets on text and image respectively. The text dataset we use is the *20 newsgroups dataset*, which comprises around 18000 newsgroups posts on 20 topics. The image dataset is the *Olivetti faces dataset* from AT&T Laboratories Cambridge, which consists of 400 64*64 images of 40 distinct subjects. Both of these two datasets are high dimensional, and Euclidean distance is important to cluster the data into different set of topics or subjects.
 
-The rest of this report is organized as follows: Section 2 gives an introduction on PCA and random projection. In Section 3, we empirically study the performance of PCA, random projection, and sparse random projection, by applying these dimensionality reduction techniques to text and image datasets. Then in Section 4, we empirically study the performance of k-means and kNN on the data sets before and after dimensionality reduction, and hence understand how dimensionality reduction can help with practical data mining tasks. Section 5 discusses some of the pros and cons of PCA and random projection. Finally Section 6 concludes this report.
+The rest of this report is organized as follows: Section 2 gives an introduction on PCA and random projection. In Section 3, we empirically study the performance of PCA, random projection, and sparse random projection, by applying these dimensionality reduction techniques to text and image datasets. Then in Section 4, we empirically study the performance of k-means and kNN on the data sets before and after dimensionality reduction, and hence understand how dimensionality reduction can help with practical data mining tasks. Finally Section 5 concludes this report.
 
 ## 2. Methods for Dimensionality Reduction
 
@@ -268,9 +268,11 @@ Similar to the experimental setting above for text data, the 100 images are spli
 
 All three dimensionality reduction methods give very similar results. As the dataset is small, it is difficult to draw any conclusions. In terms of time complexity, as we have reasoned in Section 4.2.2, the PCA is the fastest in running timei, although it has a larger time complexity.
 
-## 5. Pros and Cons of Dimensionality Reduction Methods
+## 5. Conclusion
 
-## 6. Conclusion
+In this report we have presented a brief introduction to PCA, RP and SRP, and empirically studied their performance on k-means and k-NN on text and image data. All three dimensionality reduction methods provide decent performance, which is close to applying k-means and k-NN on original data. RP outperforms SRP in most cases, and is also able to outperform PCA in certain cases. Both RP and SRP are significantly faster than PCA when the dataset and dimensionality are large, and SRP runs fastest in most cases due to its sparsity.
+
+Our experimental evaluation shows that these dimensionality reduction techniques are beneficial in applications where the pairwise distance between data points are important. By giving decent performance and being much more efficient than PCA, RP and SRP are good alternatives to the statistically optimal method PCA, especially when the dimensionality of the dataset is large.
 
 ## References
 
