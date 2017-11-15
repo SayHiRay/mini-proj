@@ -253,6 +253,8 @@ talk.politics.mideast       0.56      0.99      0.72
 
 The average running time for applying PCA is 111.72 seconds. The average running time for performing kNN is 6.20 seconds. The combined time cost is around the same as running kNN on the original datasets, and is much less efficient than running kNN after RP or SRP. The precision, recall, and f1 score are lower than RP, although look still decent.
 
+In summary, the results of running kNN on our text data can be summarized in the following table:
+
 |           | Original Image + K-NN | RP + K-NN     | SRP + K-NN    | PCA + K-NN      |
 | --------- | --------------------- | ------------- | ------------- | --------------- |
 | Time      | 122.48s               | 8.23s + 6.15s | 3.13s + 6.17s | 111.72s + 6.20s |
