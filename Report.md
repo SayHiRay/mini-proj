@@ -6,8 +6,6 @@
 * Chen Shaozhuang, A0134531R
 * Li Yuanda, A0078501J
 
-This interim report is a part of our final report for this MiniProject. While all the survey of related theories and most of our experiments have already been done, we do not have the time yet to put in all of them. Instead, we give the full introduction of our project in Section 1, and some experimental results on applying **kNN** in Section 4. We hope this interim report could give a good sense on the topics and approaches involved in our project, and we are thrilled to present a complete and self-contained final report in next week.
-
 ## Abstract
 
 Dimensionality reduction is a commonly used technique for processing high dimensional data. By projecting high dimensional data onto a lower-dimensional space, many machine learning tasks can run significantly faster. However, many classic dimensionality reduction techniques such as principle component analysis (PCA) are expensive to perform. In some cases, the benefit in time complexity that a machine learning algorithm gained from lower dimensional data can be less than the cost of performing PCA. As another powerful technique for dimensionality reduction, random projection is much more efficient in computational time, and has the nice property of almost preserving Euclidean distance when certain condition is satisfied. In this report, we give an introduction to both PCA and random projection, and present experimental results on how they can boost the performance of two classic machine learning algorithms, which are k-means clustering and k-nearest-neighbor classification.
@@ -16,7 +14,7 @@ Dimensionality reduction is a commonly used technique for processing high dimens
 
 Many data mining applications deal with high-dimensional data. For example, when dealing with large amount of text and image data, it is common to represent the data in a high-dimensional vector space. Some classic algorithms for data mining and predictive analysis including k-means clustering and k-nearest-neighbor (kNN) classification become computationally expensive when applied to such high-dimensional data. Therefore, it is desirable to perform dimensionality reduction with low distortion on the original data, before further mining and analysis are applied.
 
-Principle component analysis (PCA) is one of the most widely used technique to perform dimensionality reduction. It is optimal, in the sense that it gives minimized mean square error over all projections onto a space with the same dimension. However, PCA is computationally expensive, and hence is not a good match for high-dimensional data sets. Fortunately, another dimensionality reduction technique, random projection has been found to be much more efficient than PCA. According to Johnson-Lindenstrauss lemma, the reduced data set can be sufficiently accurate (in the sense of preserving pairwise Euclidean distance) by applying random projection on the high dimensional data. The sparse version of random projection can be even cheaper by introducing sparsity into the random matrix used in projection.
+Principle component analysis (PCA) is one of the most widely used technique to perform dimensionality reduction. It is optimal, in the sense that it gives minimized mean square error over all projections onto a space with the same dimension. However, PCA is computationally expensive, and hence is not a good match for high-dimensional data sets. Fortunately, another dimensionality reduction technique, random projection has been found to be much more efficient than PCA. According to Johnson-Lindenstrauss lemma [1], the reduced data set can be sufficiently accurate (in the sense of preserving pairwise Euclidean distance) by applying random projection on the high dimensional data. The sparse version of random projection can be even cheaper by introducing sparsity into the random matrix used in projection.
 
 In this report, we give a introduction on two dimensionality reduction methods - PCA and random projection, and briefly describe some of their properties. Then we introduce Johnson-Lindenstrauss lemma, which gives performance guarantee for random projection. A sparse version of random projection will also be introduced.
 
@@ -30,11 +28,58 @@ The rest of this report is organized as follows: Section 2 gives an introduction
 
 ## 2. Methods for Dimensionality Reduction
 
+In this section, we give an brief introduction to PCA and random projection. We consider that the original data is $d$-dimenxional, and we want to reduce the dimensionality to $k$, where $k <<d$. We use $X_{d \times N}$ to denote the original dataset of $N$ $d$-dimensional observations.
+
 #### 2.1 Principle Component Analysis
+
+To perform PCA, we first consider the eigenvalue decomposition of the data covariance matrix $XX^T$:
+$$
+\frac{1}{N-1} XX^T = E \Lambda E^T
+$$
+where columns of $E$ is eigenvectors corresponding to the respective eigenvalues in $\Lambda$. If a reduced dimensin of $k$ is desired, then the $N$ $k$-dimensional data matrix after dimensionality reduction using PCA can be obtained by computing:
+$$
+X_{PCA} = E_k^T X
+$$
+where the $E_k$ of dimension $d \times k$ contains the $k$ eigenvectors corrensponding to the $k$ largest eigenvalues in $\Lambda$. By performing PCA for dimensionality reduction, the mean squared error introduced in the projection is minimized over all possible projections onto a $k$-dimensional space.
+
+Despite its optimality in a sense, one disadvantage of PCA is it is expensive to compute. The time complexity of performing PCA is $O(d^2N+d^3)$.
 
 #### 2.2 Random Projection and Its Sparse Variant
 
+Random projection is done using:
+$$
+X_{RP} =RX
+$$
+Where $X$ of dimension $d\times N$ is the original data matrix, $R$ of dimension $k \times d$ is the projection matrix, and $X_{RP}$ has dimension $k\times N$.
+
+The key of random projection is how to get the random matrix $R$. In a normal random projection, each entry $r_{ij}$ of $R$ follows $i.i.d$ Ganssian distribution. The time complexity for generating a random matrix and performing the matrix multiplication in random projection is $O(dkN)$.
+
+To further save computational savings in practice, there are many sparse variants of random projection. One common choice is as the following [2]: 
+$$
+r_{ij}=\sqrt {3} \cdot 
+    \begin{cases}
+      +1, & \text{with probability}\ 1/6 \\
+      0, & \text{with probability 2/3} \\
+      -1, & \text{with probability 1/6}
+    \end{cases}
+$$
+where only intergers -1, 0, 1 are required in the random projection matrix.
+
+In section 3 and 4, we will emprically study both the normal random projection where $r_{ij}$ sampled from Gaussian distribution, and the sparse random projection shown above.
+
+Despite the simplicity of random projection, it can be shown that if the dimension $k$ is suitably high, then the distances between the data points can be approximately preserved after projection [1]. We will introduce the corresponding Lemma in the next subsection. 
+
 #### 2.3 Johnson-Lindenstrauss Lemma 
+
+The Johnson-Lindenstrauss Lemma Lemma, as stated in [1], :
+
+> For any $0<ϵ<1$ and any integer $N$, let $k$ be a positive integer such that $k≥4(ϵ^2/2−ϵ^3/3)^{−1}log(N)$. Then for any set $V$ of $N$ points in $\mathbb{R}^{d}$, there is a mapping $f$: $\mathbb{R}^d \rightarrow \mathbb{R}^k$ such that for all $u,v∈V$,
+> $$
+> (1−ϵ)||u−v||^2≤||f(u)−f(v)||^2≤(1+ϵ)||u−v||^2
+> $$
+>
+
+The J-L Lemma says that with $k$ large enough, there exists a projection to $\mathbb{R}^k$ such that the distance after projection is an $\epsilon$-approximation of the original distance. In one of the proof of J-L Lemma [3], we can get an explicit construction of a random matrix that produces the desired projection. This establishes the main theoretical foundation behind the efficiency of random projection.
 
 ## 3. Experimental Performance of Dimensionality Reduction Methods
 
@@ -228,3 +273,9 @@ All three dimensionality reduction methods give very similar results. As the dat
 ## 6. Conclusion
 
 ## References
+
+[1]	Johnson, W. B., & Lindenstrauss, J. (1984). Extensions of Lipschitz mappings into a Hilbert space. *Contemporary mathematics*, *26*(189-206), 1.
+
+[2]	Achlioptas, D. (2001, May). Database-friendly random projections. In *Proceedings of the twentieth ACM SIGMOD-SIGACT-SIGART symposium on Principles of database systems* (pp. 274-281). ACM.
+
+[3]	Dasgupta, S., & Gupta, A. (2003). An elementary proof of a theorem of Johnson and Lindenstrauss. *Random Structures & Algorithms*, *22*(1), 60-65.
