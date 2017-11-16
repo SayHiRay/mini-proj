@@ -1,4 +1,4 @@
-# 0Dimensionality Reduction and Its Application in Data Mining
+# Dimensionality Reduction and Its Application in Data Mining
 
 **Team members:**
 
@@ -28,31 +28,31 @@ The rest of this report is organized as follows: Section 2 gives an introduction
 
 ## 2. Methods for Dimensionality Reduction
 
-In this section, we give an brief introduction to PCA and random projection. We consider that the original data is $d$-dimenxional, and we want to reduce the dimensionality to $k$, where $k <<d$. We use $X_{d \times N}$ to denote the original dataset of $N$ $d$-dimensional observations.
+In this section, we give an brief introduction to PCA and random projection. We consider that the original data is $d$-dimensional, and we want to reduce the dimensionality to $k$, where $k <<d$. We use $X_{d \times N}$ to denote the original dataset of $N$ $d$-dimensional observations.
 
 #### 2.1 Principle Component Analysis
 
-To perform PCA, we first consider the eigenvalue decomposition of the data covariance matrix $XX^T$:
+To perform PCA, we first consider the eigenvalue decomposition of the data covariance matrix $\frac{1}{N-1}XX^T$:
 $$
 \frac{1}{N-1} XX^T = E \Lambda E^T
 $$
-where columns of $E$ is eigenvectors corresponding to the respective eigenvalues in $\Lambda$. If a reduced dimensin of $k$ is desired, then the $N$ $k$-dimensional data matrix after dimensionality reduction using PCA can be obtained by computing:
+where columns of $E$ is eigenvectors corresponding to the respective eigenvalues in $\Lambda$. If a reduced dimension of $k$ is desired, then the $N$ $k$-dimensional data matrix after dimensionality reduction using PCA can be obtained by computing:
 $$
 X_{PCA} = E_k^T X
 $$
-where the $E_k$ of dimension $d \times k$ contains the $k$ eigenvectors corrensponding to the $k$ largest eigenvalues in $\Lambda$. By performing PCA for dimensionality reduction, the mean squared error introduced in the projection is minimized over all possible projections onto a $k$-dimensional space.
+where the $E_k$ of dimension $d \times k$ contains the $k$ eigenvectors corresponding to the $k$ largest eigenvalues in $\Lambda$. By performing PCA for dimensionality reduction, the mean squared error introduced in the projection is minimized over all possible projections onto a $k$-dimensional space.
 
 Despite its optimality in a sense, one disadvantage of PCA is it is expensive to compute. The time complexity of performing PCA is $O(d^2N+d^3)$.
 
 #### 2.2 Random Projection and Its Sparse Variant
 
-Random projection is done using:
+Gaussian random projection (we will call it random projection in this report) is done using:
 $$
 X_{RP} =RX
 $$
 Where $X$ of dimension $d\times N$ is the original data matrix, $R$ of dimension $k \times d$ is the projection matrix, and $X_{RP}$ has dimension $k\times N$.
 
-The key of random projection is how to get the random matrix $R$. In a normal random projection, each entry $r_{ij}$ of $R$ follows $i.i.d$ Ganssian distribution. The time complexity for generating a random matrix and performing the matrix multiplication in random projection is $O(dkN)$.
+The key of random projection is how to get the random matrix $R$. In a Gaussian random projection, each entry $r_{ij}$ of $R$ follows $i.i.d$ Gaussian distribution $\mathcal{N}(0, \frac{1}{k})$. The time complexity for generating a random matrix and performing the matrix multiplication in random projection is $O(dkN)$.
 
 To further save computational savings in practice, there are many sparse variants of random projection. One common choice is as the following [2]: 
 $$
@@ -63,9 +63,9 @@ r_{ij}=\sqrt {3} \cdot
       -1, & \text{with probability 1/6}
     \end{cases}
 $$
-where only intergers -1, 0, 1 are required in the random projection matrix.
+where only integers -1, 0, 1 are required in the random projection matrix.
 
-In section 3 and 4, we will emprically study both the normal random projection where $r_{ij}$ sampled from Gaussian distribution, and the sparse random projection shown above.
+In section 3 and 4, we will empirically study both the normal random projection where $r_{ij}$ sampled from Gaussian distribution, and the sparse random projection shown above.
 
 Despite the simplicity of random projection, it can be shown that if the dimension $k$ is suitably high, then the distances between the data points can be approximately preserved after projection [1]. We will introduce the corresponding Lemma in the next subsection. 
 
